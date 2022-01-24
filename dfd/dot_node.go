@@ -13,10 +13,12 @@ type dotNode struct {
 	graph.Node
 	dotID string
 	// Node label.
-	Label string
-	Shape string
-	Style string
-	Dir   string
+	Label     string
+	Shape     string
+	Style     string
+	Dir       string
+	Color     string
+	Fillcolor string
 }
 
 func (n *dotNode) ExternalID() string {
@@ -39,6 +41,10 @@ func (n *dotNode) SetAttribute(attr encoding.Attribute) error {
 		n.Style = attr.Value
 	case "dir":
 		n.Dir = attr.Value
+	case "color":
+		n.Color = attr.Value
+	case "fillcolor":
+		n.Fillcolor = attr.Value
 	default:
 		return fmt.Errorf("unable to unmarshal node DOT attribute with key %q", attr.Key)
 	}
@@ -48,7 +54,8 @@ func (n *dotNode) SetAttribute(attr encoding.Attribute) error {
 
 // Attributes returns the DOT attributes of the node.
 func (n *dotNode) Attributes() []encoding.Attribute {
-	if len(n.Label) == 0 && len(n.Shape) == 0 && len(n.Style) == 0 && len(n.Dir) == 0 {
+	if len(n.Label) == 0 && len(n.Shape) == 0 && len(n.Style) == 0 &&
+		len(n.Dir) == 0 && len(n.Color) == 0 && len(n.Fillcolor) == 0 {
 		return nil
 	}
 	var attrs []encoding.Attribute
@@ -63,6 +70,12 @@ func (n *dotNode) Attributes() []encoding.Attribute {
 	}
 	if len(n.Dir) != 0 {
 		attrs = append(attrs, encoding.Attribute{Key: "dir", Value: n.Dir})
+	}
+	if len(n.Color) != 0 {
+		attrs = append(attrs, encoding.Attribute{Key: "color", Value: n.Color})
+	}
+	if len(n.Fillcolor) != 0 {
+		attrs = append(attrs, encoding.Attribute{Key: "fillcolor", Value: n.Fillcolor})
 	}
 	return attrs
 }
