@@ -35,7 +35,7 @@ func TestInitializeDFD(t *testing.T) {
 
 func TestInitializeTrustBoundary(t *testing.T) {
 	g_name := "my dfd"
-	g := InitializeTrustBoundary(g_name)
+	g := InitializeTrustBoundary(g_name, "")
 
 	if g.Name != g_name {
 		t.Errorf("Expected a TrustBoundary name of %s, but got %s", g_name, g.Name)
@@ -139,7 +139,7 @@ func TestTrustBoundaryAddNodeElem(t *testing.T) {
 		{&TestNode{}, true},
 	}
 
-	g := InitializeTrustBoundary("")
+	g := InitializeTrustBoundary("", "")
 
 	for _, c := range cases {
 		t.Run(fmt.Sprintf("Adding node element of type %s to TrustBoundary", reflect.TypeOf(c.node)), func(t *testing.T) {

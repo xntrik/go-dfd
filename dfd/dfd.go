@@ -26,7 +26,8 @@ type DataFlowDiagram struct {
 type TrustBoundary struct {
 	*dfdGraph
 
-	Name string
+	Name  string
+	Color string
 
 	Processes        map[string]*Process
 	ExternalServices map[string]*ExternalService
@@ -89,9 +90,10 @@ func DeserializeTrustBoundary(id string) *TrustBoundary {
 	}
 }
 
-func InitializeTrustBoundary(name string) *TrustBoundary {
+func InitializeTrustBoundary(name, color string) *TrustBoundary {
 	tb := &TrustBoundary{
 		Name:             name,
+		Color:            color,
 		Processes:        make(map[string]*Process),
 		ExternalServices: make(map[string]*ExternalService),
 		DataStores:       make(map[string]*DataStore),
@@ -208,10 +210,10 @@ func (g *DataFlowDiagram) RemoveDataStore(id string) {
 	return
 }
 
-func (dfd *DataFlowDiagram) AddTrustBoundary(name string) (*TrustBoundary, error) {
+func (dfd *DataFlowDiagram) AddTrustBoundary(name, color string) (*TrustBoundary, error) {
 	dfd.mtx.Lock()
 	defer dfd.mtx.Unlock()
-	tb := InitializeTrustBoundary(name)
+	tb := InitializeTrustBoundary(name, color)
 	dfd.TrustBoundaries[tb.ExternalID()] = tb
 	return dfd.TrustBoundaries[tb.ExternalID()], nil
 }
@@ -302,7 +304,11 @@ func (sg *TrustBoundary) graphAttributes() []encoding.Attribute {
 	attrs[0] = makeAttribute("label", sg.Name)
 	attrs[1] = makeAttribute("fontsize", "10")
 	attrs[2] = makeAttribute("style", "dashed")
-	attrs[3] = makeAttribute("color", "grey35")
+	graphColor := "grey35"
+	if sg.Color != "" {
+		graphColor = sg.Color
+	}
+	attrs[3] = makeAttribute("color", graphColor)
 	attrs[4] = makeAttribute("fontcolor", "grey35")
 	return attrs
 }
