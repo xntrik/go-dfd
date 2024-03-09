@@ -1,4 +1,4 @@
-module github.com/marqeta/go-dfd
+module github.com/xntrik/go-dfd
 
 require (
 	gonum.org/v1/gonum v0.0.0-20181210083604-572d9101fe4f
